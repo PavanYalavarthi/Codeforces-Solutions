@@ -1,4 +1,4 @@
-# Codechef Solutions Archive
+# Codeforces Solutions Archive
 
 This repository contains my personal solutions to various problems from [CODEFORCES](https://codeforces.com/).  
 These files are mainly a backup of the problems I’ve solved and also a simple reference for fellow developers who want clear explanations and working code.
