@@ -1,5 +1,7 @@
 /*
 
+Problem credits: https://codeforces.com/problemset/problem/1187/E
+
 You are given a tree (an undirected connected acyclic graph) consisting of n vertices. You are playing a game on this tree.
 
 Initially all vertices are white. On the first turn of the game you choose one vertex and paint it black. Then on each turn you choose a white vertex adjacent (connected by an edge) to any black vertex and paint it black.
@@ -52,7 +54,7 @@ void dfs1(int node, int par, vector<int> gr[]) {
 }
 
 void dfs2(int node, int par, ll par_res, vector<int> gr[]) {
-    dp[node] += par_res + n - sz[node]; // Adding par_res + size of parent
+    dp[node] += par_res + n - sz[node]; // Adding par_res + size of parent (sz of parent = n - sz of child)
     ans = max(ans, dp[node]);
     for(int child: gr[node]) {
         if (child != par) {
