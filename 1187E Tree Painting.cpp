@@ -36,45 +36,48 @@ and par_res becomes => dp[node] - dp[child] - sz[child], from dp[node] removing 
 
 #include<bits/stdc++.h>
 using namespace std;
-
 #define ll long long
-
-int n;
-ll ans = 0;
+vector<vector<int>>adj;
 vector<ll>sz, dp;
-void dfs1(int node, int par, vector<int> gr[]) {
-    for(int child : gr[node]) {
+
+ll ans = 0;
+int n;
+
+void dfs(int node, int par) {
+    for(int child: adj[node]) {
         if (child != par) {
-            dfs1(child, node, gr);
-            sz[node] += sz[child];
+            dfs(child, node);
             dp[node] += dp[child];
+            sz[node] += sz[child];
         }
     }
     dp[node] += sz[node];
 }
 
-void dfs2(int node, int par, ll par_res, vector<int> gr[]) {
-    dp[node] += par_res + n - sz[node]; // Adding par_res + size of parent (sz of parent = n - sz of child)
+void dfs2(int node, int par) {
     ans = max(ans, dp[node]);
-    for(int child: gr[node]) {
+    for(int child: adj[node]) {
         if (child != par) {
-            dfs2(child, node, dp[node] - dp[child] - sz[child], gr); // In dp[node], removing dp[child] and sz[child]
+            int par_dp = dp[node], child_dp = dp[child];
+            dp[node] -= dp[child] + sz[child], dp[child] += dp[node] + (n - sz[child]);
+            dfs2(child, node);
+            dp[node] = par_dp, dp[child] = child_dp;
         }
     }
 }
+
 int main() {
-    cin.tie(nullptr)->sync_with_stdio(false);
     cin >> n;
-    vector<int>gr[n];
-    for(int i = 1, u, v; i <n ;i++) {
+    adj.resize(n+1);
+    sz.assign(n+1, 1);
+    dp.assign(n+1, 0);
+    for(int i = 1, u, v; i < n; i++) {
         cin >> u >> v;
-        u--, v--;
-        gr[u].push_back(v);
-        gr[v].push_back(u);
+        adj[u].push_back(v);
+        adj[v].push_back(u);
     }
-    sz.assign(n, 1);
-    dp.assign(n, 0);
-    dfs1(0, -1, gr);
-    dfs2(0, -1, 0, gr);
+    dfs(1, 0);
+
+    dfs2(1, 0);
     cout << ans;
 }
